@@ -9,7 +9,7 @@
       state :  directory
   - name : file from git
     ansible.builtin.git : 
-      repo : https://github.com/PRATYUSHNAIR1976/pechuwar.git
+      repo : https://github.com/Krishna-972/project-1.git
       dest : /root/ansible/warfile/
   - name : installing tomcat server centos
     package : 
