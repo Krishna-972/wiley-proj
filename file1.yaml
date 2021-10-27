@@ -1,0 +1,54 @@
+---
+- hosts : tomcat
+  remote_user : root
+  become : yes
+  tasks :
+  - name : creating directory
+    file:
+      path : /root/ansible/warfile
+      state :  directory
+  - name : file from git
+    ansible.builtin.git : 
+      repo : https://github.com/PRATYUSHNAIR1976/pechuwar.git
+      dest : /root/ansible/warfile/
+  - name : installing tomcat server centos
+    package : 
+      name : tomcat
+      state : present
+    when : ansible_facts['os_family'] == "RedHat"
+  - name : installing tomcat server ubuntu
+    package : 
+      name : tomcat9
+      state : present
+    when : ansible_facts['os_family'] == "Debian"
+  - name : starting tomcat centos
+    service : 
+      name : tomcat
+      state : started
+    when : ansible_facts['os_family'] == "RedHat"
+  - name : starting tomcat9 ubuntu
+    service : 
+      name : tomcat9
+      state : started
+    when : ansible_facts['os_family'] == "Debian"
+  - name : copying addressbook file centos
+    copy :
+      src : /root/ansible/warfile/addressbook.war
+      dest : /usr/share/tomcat/webapps
+    when : ansible_facts['os_family'] == "RedHat"
+  - name : copying addressbook file ubuntu
+    copy : 
+      src : /root/ansible/warfile/addressbook.war
+      dest : /var/lib/tomcat9/webapps
+    when : ansible_facts['os_family'] == "Debian
+  - name : starting tomcat centos
+    service :
+      name : tomcat
+      state : restarted
+    when : ansible_facts['os_family'] == "RedHat"
+  - name : starting tomcat9 ubuntu
+    service : 
+      name : tomcat9
+      state : restarted
+    when : ansible_facts['os_family'] == "Debian"
+ 
